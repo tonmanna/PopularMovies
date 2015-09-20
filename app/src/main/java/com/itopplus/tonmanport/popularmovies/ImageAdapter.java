@@ -8,9 +8,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import java.util.ArrayList;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.itopplus.tonmanport.popularmovies.R;
+
+import java.text.DateFormat;
+import java.util.List;
+
+import api.TheMoviesModelResultList;
 
 
 /**
@@ -20,46 +27,56 @@ public class ImageAdapter extends BaseAdapter {
     private final String TAG = "ImageAdapterTAG";
     private Context mContext;
     private int layOutID;
-    private ArrayList<theMovieDBItems> theMovieDBItems;
+    private List<TheMoviesModelResultList> theMovieResultItems;
 
-    public ImageAdapter(Context mContext,int layOutID,ArrayList<theMovieDBItems> theMovieDBItems) {
+    public ImageAdapter(Context mContext,int layOutID,List<TheMoviesModelResultList> theMovieResultItems) {
         this.mContext = mContext;
         this.layOutID = layOutID;
-        this.theMovieDBItems = theMovieDBItems;
+        this.theMovieResultItems = theMovieResultItems;
     }
 
     @Override
     public int getCount() {
-        return theMovieDBItems.size();
+        return theMovieResultItems.size();
     }
 
-    public theMovieDBItems getItem(int position) {
-        return theMovieDBItems.get(position);
+    public TheMoviesModelResultList getItem(int position) {
+        return theMovieResultItems.get(position);
     }
 
     public long getItemId(int position) {
-        return theMovieDBItems.get(position).ID;
+        return theMovieResultItems.get(position).id;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
+        View view = convertView;
+
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            imageView = (ImageView)(inflater.inflate(layOutID,parent,false).findViewById(R.id.grid_image_item));
-            imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
+            view = inflater.inflate(layOutID,parent,false);
             Log.v(TAG, "Create View :" + position);
         } else {
-            imageView = (ImageView) convertView;
             Log.d(TAG, "Recycle View :" + position);
         }
 
-        String url = theMovieDBItems.get(position).url.toString();
+        TheMoviesModelResultList currentItem =  theMovieResultItems.get(position);
+
+        ImageView imageView = (ImageView) view.findViewById(R.id.grid_image_item);
+        TextView textView = (TextView) view.findViewById(R.id.grid_text_item);
+        TextView dateTextView = (TextView) view.findViewById(R.id.grid_date_item);
+
+        textView.setText(currentItem.title);
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(mContext);
+        dateTextView.setText(dateFormat.format(currentItem.release_date));
+        String url = currentItem.poster_path;
         Glide.with(mContext)
                 .load(url)
+                //.diskCacheStrategy(DiskCacheStrategy.ALL) // Cache Everything
                 .centerCrop()
-                .placeholder(R.drawable.loading_spinner)
+                .placeholder(R.drawable.progress_animation)
                 .crossFade()
                 .into(imageView);
-        return imageView;
+
+        return view;
     }
 }

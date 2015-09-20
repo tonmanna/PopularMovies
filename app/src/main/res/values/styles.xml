@@ -1,8 +1,33 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
     </style>
+    <!--parent="@android:style/TextAppearance"-->
+    <style name="textDetail">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textInside</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingTop">2dp</item>
+    </style>
 
+    <style name="textHead">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textInside</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:paddingLeft">10dp</item>
+    </style>
+
+    <style name="textHead2">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textInside</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
 </resources>

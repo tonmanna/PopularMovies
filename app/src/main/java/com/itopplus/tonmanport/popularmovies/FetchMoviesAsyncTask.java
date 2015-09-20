@@ -1,17 +1,25 @@
 package com.itopplus.tonmanport.popularmovies;
 
 import android.os.AsyncTask;
+import org.json.JSONException;
 
-import java.util.ArrayList;
+import api.TheMoviesRepository;
+import api.TheMoviesModel;
+
 
 /**
  * Created by Tonman on 26/8/2558.
  */
-public class FetchMoviesAsyncTask extends AsyncTask<String,Void,ArrayList<theMovieDBItems>> {
+public class FetchMoviesAsyncTask extends AsyncTask<TheMoviesModel,Void, TheMoviesModel> {
     private final String TAG = "FetchMoviesAsyncTaskTAG";
-
     @Override
-    protected ArrayList<theMovieDBItems> doInBackground(String... params) {
-        return  null;
+    protected TheMoviesModel doInBackground(TheMoviesModel... theMovies) {
+        TheMoviesRepository theMovieRepo = new TheMoviesRepository();
+        try {
+            TheMoviesModel result = theMovieRepo.getMovie(theMovies[0]);
+            return result;
+        }catch (JSONException ex){
+            return null;
+        }
     }
 }

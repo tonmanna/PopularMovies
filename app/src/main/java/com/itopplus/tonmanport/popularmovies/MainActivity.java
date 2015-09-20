@@ -1,131 +1,71 @@
 package com.itopplus.tonmanport.popularmovies;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import api.TheMoviesRepository;
+import api.TheMoviesModel;
 
 public class MainActivity extends AppCompatActivity {
 
     public final String TAG = "PopularMoviesTAG";
-
+    private boolean bToggle = true;
+    private int currentPage = 1;
+    TheMoviesModel result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+        if(savedInstanceState!=null) {
+            bToggle = savedInstanceState.getBoolean("bToggle");
+            currentPage = savedInstanceState.getInt("currentPage");
+        }else{
+            // Probably initialize members with default values for a new instance
+        }
+
+        Log.v(TAG,String.valueOf(bToggle));
+        Log.v(TAG,String.valueOf(currentPage));
         setContentView(R.layout.activity_main);
+        RefreshData();
+    }
 
-        ArrayList<theMovieDBItems> gridArray = new ArrayList<>();
-        theMovieDBItems mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
-        mov = new theMovieDBItems();
-        mov.ID = 1;
-        mov.url = "http://www.endpointprotector.com/images/img/features/ios-android.png";
-        gridArray.add(mov);
+    public void RefreshData(){
+        FetchMoviesAsyncTask fetchMovies = new FetchMoviesAsyncTask();
+        TheMoviesModel api = new TheMoviesModel();
+        if(bToggle)
+            api.mode = "popularity";
+        else
+            api.mode = "vote_average";
+
+        api.page = currentPage;
 
 
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(this, R.layout.grid_item, gridArray));
-
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
+        fetchMovies.execute(api);
+        try {
+            result = fetchMovies.get();
+            GridView gridview = (GridView) findViewById(R.id.gridview);
+            gridview.setAdapter(new ImageAdapter(this, R.layout.grid_item, result.results));
+            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), MovieDetailActivity.class);
+                    intent.putExtra("movies_result",result.results.get(position));
+                    startActivity(intent);
+                }
+            });
+        }catch (Exception ex){
+            Toast toast = Toast.makeText(this, "Can't fetch data this time.Please try again later.", Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
 
@@ -144,10 +84,35 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_toggle) {
+            bToggle = !bToggle;
+            if(bToggle)
+                item.setTitle(R.string.highrate_text);
+            else
+                item.setTitle(R.string.popularity_text);
+
+            currentPage = 1;
+            RefreshData();
+        }else if(id == R.id.action_nextpage){
+            currentPage = currentPage+1;
+            RefreshData();
+        }else if(id == R.id.action_prevpage){
+            if(currentPage!=1) {
+                currentPage = currentPage - 1;
+                RefreshData();
+            }
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        savedInstanceState.putBoolean("bToggle", bToggle);
+        savedInstanceState.putInt("currentPage", currentPage);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
 }

@@ -1,6 +1,5 @@
 package lib;
 
-import android.net.Uri;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -15,11 +14,9 @@ import java.net.URL;
  */
 public class Utility {
 
-    private Utility(){
-    };
+    private Utility(){}
 
-    /// TODO : JSON Serilize should be here for replace return String
-    public static String HTTPGet(String BASE_URL,IHTTPRequestParam params){
+    public static String HTTPGet(IHTTPRequestParam params){
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -29,8 +26,7 @@ public class Utility {
         String resultString = null;
 
         try {
-            String QueryString = params.getParam();
-            URL url = new URL(BASE_URL+QueryString);
+            URL url = new URL(params.getURL().toString());
 
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();

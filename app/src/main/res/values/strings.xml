@@ -2,4 +2,7 @@
     <string name="app_name">Popular Movies</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_movie_detail">Movie detail</string>
+    <string name="highrate_text">Sort by high rate</string>
+    <string name="popularity_text">Sort by popularity</string>
 </resources>
