@@ -2,6 +2,7 @@ package com.itopplus.tonmanport.popularmovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void RefreshData() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         FetchMoviesAsyncTask fetchMovies = new FetchMoviesAsyncTask();
         TheMoviesModel api = new TheMoviesModel();
         if (bToggle)

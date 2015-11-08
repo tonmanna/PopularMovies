@@ -1,3 +1,5 @@
 Please put your API key to
-app\src\main\java\api\TheMoviesModel.java
-public String api = "APITOKEN";
+app\src\main\java\lib\Utility.java
+
+Replace :
+  public static String API_KEY = "APITOKEN";

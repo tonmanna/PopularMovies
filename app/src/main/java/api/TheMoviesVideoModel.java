@@ -5,13 +5,14 @@ import android.net.Uri;
 import java.util.List;
 
 import lib.IHTTPRequestParam;
+import lib.Utility;
 
 /**
  * Created by Tonman on 29/10/2558.
  */
 public class TheMoviesVideoModel implements IHTTPRequestParam {
 
-    public String api = "14dd997f3bce981d5cc1118ace4bf690";
+    public String api = Utility.API_KEY;
     private final String API_KEY = "api_key";
     public final String BASE_URL = "api.themoviedb.org";
     public final String API_VERSION = "3";

@@ -12,7 +12,15 @@
         android:layout_height="100dp">
         <TextView android:id="@+id/detail_text_head" android:text="@string/hello_world" style="@style/textHead"/>
         <TextView android:id="@+id/detail_text_head2" android:text="@string/hello_world" style="@style/textHead2"/>
-
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/textInside"
+            android:paddingRight="5dp"
+            android:text="Favorite"
+            android:id="@+id/favorite_checkbox"
+        />
     </RelativeLayout>
 
     <RelativeLayout

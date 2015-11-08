@@ -47,19 +47,20 @@ public class AdapterListViewTrailer extends ArrayAdapter<TheMoviesVideoResultLis
         }else{
 
         }
-        TheMoviesVideoResultList i = objects.get(position);
+        final TheMoviesVideoResultList i = objects.get(position);
         ButterKnife.bind(this, v);
         if (i != null) {
-            final String CurrentURL = "https://m.youtube.com/watch?v="+i.key;
+            final String CurrentURL = "http://www.youtube.com/v/"+i.key;
             String textURL = "<a href=\""+CurrentURL+"\">Video"+(position+1)+"</a>";
             Spanned htmlText= Html.fromHtml(textURL);
             textViewVideoLink.setText(htmlText);
             textViewVideoLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Uri uri = Uri.parse(CurrentURL);
+                    Uri uri = Uri.parse("vnd.youtube:"+ i.key);
                     Intent intent = new Intent(Intent.ACTION_VIEW,uri);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("VIDEO_ID",i.key);
                     mContext.startActivity(intent);
                 }
             });

@@ -3,32 +3,26 @@ package api;
 import android.net.Uri;
 
 import java.util.List;
+import java.util.Set;
 
 import lib.IHTTPRequestParam;
 import lib.Utility;
 
 /**
- * Created by Tonman on 29/10/2558.
+ * Created by Tonman on 9/11/2558.
  */
-public class TheMoviesReviewModel implements IHTTPRequestParam {
-
-    // params
+public class TheMoviewsFavoriteListModel implements IHTTPRequestParam{
+    public String api = Utility.API_KEY;
     private final String API_KEY = "api_key";
-    private final String PAGE = "page";
     public final String BASE_URL = "api.themoviedb.org";
     public final String API_VERSION = "3";
     public final String SERVICE_PATH = "movie";
 
-    public String api = Utility.API_KEY;
-
     public long id;
-    public int page = 1;
-    public String language;
+    public Set<String> moviesIDList;
 
-    public String total_pages;
-    public String total_results;
-
-    public List<TheMoviesReviewResultList> results;
+    // Result Parameter
+    public List<TheMoviesResultList> results;
 
     @Override
     public Uri getURL() {
@@ -38,10 +32,7 @@ public class TheMoviesReviewModel implements IHTTPRequestParam {
                 .appendPath(API_VERSION)
                 .appendPath(SERVICE_PATH)
                 .appendPath(String.valueOf(id))
-                .appendPath("reviews")
-                .appendQueryParameter(API_KEY, api)
-                .appendQueryParameter(PAGE, String.valueOf(page))
-                .build();
+                .appendQueryParameter(API_KEY, api).build();
         return buildUri;
     }
 }
