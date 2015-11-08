@@ -5,4 +5,6 @@
     <string name="title_activity_movie_detail">Movie detail</string>
     <string name="highrate_text">Sort by high rate</string>
     <string name="popularity_text">Sort by popularity</string>
+    <string name="trailer_header">Trailer : </string>
+    <string name="review_head">Reviews : </string>
 </resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    >
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/borderbottom"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/textHead3"
+            android:paddingLeft="5dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Review by :"
+            android:id="@+id/auther_head"
+            />
+        <TextView
+            style="@style/textDetail2"
+            android:paddingLeft="5dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="Worawut Boontan"
+            android:textColor="@color/accent_material_light"
+            android:id="@+id/auther_text"
+            />
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/textDetail2"
+            android:paddingLeft="5dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="Worawut Boontan"
+            android:id="@+id/content_text"/>
+    </LinearLayout>
+</LinearLayout>

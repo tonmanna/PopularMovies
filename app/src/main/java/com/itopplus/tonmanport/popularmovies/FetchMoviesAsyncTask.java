@@ -6,10 +6,6 @@ import org.json.JSONException;
 import api.TheMoviesRepository;
 import api.TheMoviesModel;
 
-
-/**
- * Created by Tonman on 26/8/2558.
- */
 public class FetchMoviesAsyncTask extends AsyncTask<TheMoviesModel,Void, TheMoviesModel> {
     private final String TAG = "FetchMoviesAsyncTaskTAG";
     @Override

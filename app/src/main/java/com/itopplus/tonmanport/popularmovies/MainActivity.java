@@ -1,6 +1,7 @@
 package com.itopplus.tonmanport.popularmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,8 +12,13 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import api.TheMoviesRepository;
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.squareup.okhttp.OkHttpClient;
+
 import api.TheMoviesModel;
+import api.TheMoviesReviewModel;
+import api.TheMoviesVideoModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,31 +28,26 @@ public class MainActivity extends AppCompatActivity {
     TheMoviesModel result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.v(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         if(savedInstanceState!=null) {
             bToggle = savedInstanceState.getBoolean("bToggle");
             currentPage = savedInstanceState.getInt("currentPage");
         }else{
-            // Probably initialize members with default values for a new instance
-        }
 
-        Log.v(TAG,String.valueOf(bToggle));
-        Log.v(TAG,String.valueOf(currentPage));
+        }
         setContentView(R.layout.activity_main);
         RefreshData();
     }
 
-    public void RefreshData(){
+    public void RefreshData() {
         FetchMoviesAsyncTask fetchMovies = new FetchMoviesAsyncTask();
         TheMoviesModel api = new TheMoviesModel();
-        if(bToggle)
+        if (bToggle)
             api.mode = "popularity";
         else
             api.mode = "vote_average";
 
         api.page = currentPage;
-
 
         fetchMovies.execute(api);
         try {
@@ -58,16 +59,16 @@ public class MainActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), MovieDetailActivity.class);
-                    intent.putExtra("movies_result",result.results.get(position));
+                    intent.putExtra("movies_result", result.results.get(position));
+                    intent.putExtra("current_page", currentPage);
                     startActivity(intent);
                 }
             });
         }catch (Exception ex){
-            Toast toast = Toast.makeText(this, "Can't fetch data this time.Please try again later.", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(this, "Can't fetch data this time. Please try again later.", Toast.LENGTH_SHORT);
             toast.show();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,11 +109,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-
         savedInstanceState.putBoolean("bToggle", bToggle);
         savedInstanceState.putInt("currentPage", currentPage);
-
         super.onSaveInstanceState(savedInstanceState);
     }
-
 }

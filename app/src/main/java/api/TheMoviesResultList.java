@@ -3,7 +3,7 @@ package api;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TheMoviesModelResultList implements Serializable {
+public class TheMoviesResultList implements Serializable {
     public boolean adult;
     public String backdrop_path;
     public long id;

@@ -2,5 +2,6 @@
 <resources>
     <color name="textInside">#ececec</color>
     <color name="innerOpacity">#99000000</color>
+    <color name="innerOpacity2">#000c0c0c</color>
     <color name="background">#000000</color>
 </resources>

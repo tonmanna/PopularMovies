@@ -1,23 +1,21 @@
 package com.itopplus.tonmanport.popularmovies;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.itopplus.tonmanport.popularmovies.R;
 
 import java.text.DateFormat;
 import java.util.List;
 
-import api.TheMoviesModelResultList;
+import api.TheMoviesResultList;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 /**
@@ -27,9 +25,13 @@ public class ImageAdapter extends BaseAdapter {
     private final String TAG = "ImageAdapterTAG";
     private Context mContext;
     private int layOutID;
-    private List<TheMoviesModelResultList> theMovieResultItems;
+    private List<TheMoviesResultList> theMovieResultItems;
 
-    public ImageAdapter(Context mContext,int layOutID,List<TheMoviesModelResultList> theMovieResultItems) {
+    @Bind(R.id.grid_image_item) ImageView imageView;
+    @Bind(R.id.grid_text_item) TextView textView;
+    @Bind(R.id.grid_date_item) TextView dateTextView;
+
+    public ImageAdapter(Context mContext,int layOutID,List<TheMoviesResultList> theMovieResultItems) {
         this.mContext = mContext;
         this.layOutID = layOutID;
         this.theMovieResultItems = theMovieResultItems;
@@ -40,7 +42,7 @@ public class ImageAdapter extends BaseAdapter {
         return theMovieResultItems.size();
     }
 
-    public TheMoviesModelResultList getItem(int position) {
+    public TheMoviesResultList getItem(int position) {
         return theMovieResultItems.get(position);
     }
 
@@ -53,22 +55,21 @@ public class ImageAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            view = inflater.inflate(layOutID,parent,false);
-            Log.v(TAG, "Create View :" + position);
+            view = inflater.inflate(layOutID, parent,false);
         } else {
-            Log.d(TAG, "Recycle View :" + position);
+
         }
+        ButterKnife.bind(this, view);
 
-        TheMoviesModelResultList currentItem =  theMovieResultItems.get(position);
-
-        ImageView imageView = (ImageView) view.findViewById(R.id.grid_image_item);
-        TextView textView = (TextView) view.findViewById(R.id.grid_text_item);
-        TextView dateTextView = (TextView) view.findViewById(R.id.grid_date_item);
+        TheMoviesResultList currentItem =  theMovieResultItems.get(position);
 
         textView.setText(currentItem.title);
-        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(mContext);
-        dateTextView.setText(dateFormat.format(currentItem.release_date));
+        try {
+            DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(mContext);
+            dateTextView.setText(dateFormat.format(currentItem.release_date));
+        }catch(Exception ex){}
         String url = currentItem.poster_path;
+
         Glide.with(mContext)
                 .load(url)
                 //.diskCacheStrategy(DiskCacheStrategy.ALL) // Cache Everything
@@ -76,7 +77,6 @@ public class ImageAdapter extends BaseAdapter {
                 .placeholder(R.drawable.progress_animation)
                 .crossFade()
                 .into(imageView);
-
         return view;
     }
 }

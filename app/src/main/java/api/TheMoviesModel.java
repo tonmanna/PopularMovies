@@ -2,7 +2,6 @@ package api;
 
 import android.net.Uri;
 
-import java.util.Date;
 import java.util.List;
 
 import lib.IHTTPRequestParam;
@@ -13,8 +12,8 @@ import lib.IHTTPRequestParam;
 public class TheMoviesModel implements IHTTPRequestParam{
 
     // URL Parameter
-    public String api = "APITOKEN";
-    public final String BASE_URL = "http://api.themoviedb.org/3/discover/movie?";
+    public String api = "14dd997f3bce981d5cc1118ace4bf690";
+    public final String BASE_URL = "http://api.themoviedb.org/3/discover/movie";
     private final String API_KEY = "api_key";
     private final String SORT_BY_AND_MODE = "sort_by";
     private final String PAGE = "page";
@@ -27,7 +26,7 @@ public class TheMoviesModel implements IHTTPRequestParam{
     // Result Parameter
     public int total_pages;
     public int total_results;
-    public List<TheMoviesModelResultList> results;
+    public List<TheMoviesResultList> results;
 
     @Override
     public Uri getURL() {

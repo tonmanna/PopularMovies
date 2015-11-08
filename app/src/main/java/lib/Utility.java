@@ -2,6 +2,12 @@ package lib;
 
 import android.util.Log;
 
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,14 +15,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.facebook.stetho.Stetho;
+
 /**
  * Created by Tonman on 26/8/2558.
  */
 public class Utility {
 
-    private Utility(){}
-
-    public static String HTTPGet(IHTTPRequestParam params){
+    private Utility(){
+    }
+    public static String HTTPGetManual(IHTTPRequestParam params){
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -74,5 +82,16 @@ public class Utility {
             }
         }
         return resultString;
-    };
+    }
+    public static String HTTPGet(IHTTPRequestParam params) throws IOException {
+        OkHttpClient  client = new OkHttpClient();
+        client.networkInterceptors().add(new StethoInterceptor());
+        Log.w("TAG:",params.getURL().toString());
+        Request request = new Request.Builder()
+                .url(params.getURL().toString())
+                .build();
+
+        Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
 }

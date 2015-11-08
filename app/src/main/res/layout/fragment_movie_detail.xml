@@ -12,27 +12,60 @@
         android:layout_height="100dp">
         <TextView android:id="@+id/detail_text_head" android:text="@string/hello_world" style="@style/textHead"/>
         <TextView android:id="@+id/detail_text_head2" android:text="@string/hello_world" style="@style/textHead2"/>
+
     </RelativeLayout>
 
     <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/detail_layout_content"
         android:paddingTop="10dp">
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/detail_image_content"
             />
         <TextView
             style="@style/textDetail"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/innerOpacity"
             android:text="@string/hello_world"
             android:id="@+id/detail_text_content"
         />
-    </RelativeLayout>
+        <LinearLayout android:layout_width="match_parent"
+            android:background="@color/innerOpacity"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/layout_trailer"
+            android:paddingTop="10dp"
+            android:layout_below="@id/detail_text_content">
+            <TextView
+                style="@style/textHead3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/innerOpacity"
+                android:text="@string/trailer_header"
+                android:id="@+id/trailer_head"
+                />
+            <GridView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:numColumns="4"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:id="@+id/listview_video"
+                />
+        </LinearLayout>
 
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/innerOpacity"
+            android:id="@+id/listview_review"
+            android:paddingTop="10dp"
+            android:layout_below="@id/layout_trailer"
+            />
+    </RelativeLayout>
 
 </LinearLayout>
