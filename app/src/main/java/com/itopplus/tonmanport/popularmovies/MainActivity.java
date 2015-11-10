@@ -13,11 +13,13 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 import api.TheMoviesModel;
 import api.TheMoviesFavoriteListModel;
+import api.TheMoviesResultList;
 import lib.Utility;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,7 +29,13 @@ public class MainActivity extends AppCompatActivity {
         Favorite
     }
 
-    public final String TAG = "PopularMoviesTAG";
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
+
+    private boolean mTwoPane;
+    private String mLocation;
+
+
     private boolean bToggle = true;
     private DisplayMode mDisplayMode = DisplayMode.Popular;
     private int currentPage = 1;
@@ -43,6 +51,22 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
         RefreshData();
+
+        if (findViewById(R.id.movie_detail_container) != null) {
+            mTwoPane = true;
+            if (savedInstanceState == null) {
+                Bundle arguments = new Bundle();
+                arguments.putParcelable("movie", result.results.get(0));
+                MovieDetailActivityFragment fragment = new MovieDetailActivityFragment();
+                fragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.movie_detail_container, fragment)
+                        .commit();
+            }
+        } else {
+            mTwoPane = false;
+            //getSupportActionBar().setElevation(0f);
+        }
     }
 
     public void RefreshData() {
@@ -77,11 +101,24 @@ public class MainActivity extends AppCompatActivity {
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent();
-                    intent.setClass(getApplicationContext(), MovieDetailActivity.class);
-                    intent.putExtra("movies_result", result.results.get(position));
-                    intent.putExtra("current_page", currentPage);
-                    startActivity(intent);
+
+                    if(mTwoPane) {
+                        Bundle arguments = new Bundle();
+                        arguments.putParcelable("movie", result.results.get(position));
+                        MovieDetailActivityFragment fragment = new MovieDetailActivityFragment();
+                        fragment.setArguments(arguments);
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.movie_detail_container, fragment)
+                                .commit();
+                    }
+                    else {
+                        Intent intent = new Intent();
+                        intent.setClass(getApplicationContext(), MovieDetailActivity.class);
+                        Serializable objSend = result.results.get(position);
+                        intent.putExtra("movies_result", objSend);
+                        intent.putExtra("current_page", currentPage);
+                        startActivity(intent);
+                    }
                 }
             });
         }catch (Exception ex){

@@ -6,9 +6,7 @@
     <ImageView
         android:id="@+id/grid_image_item"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
-    >
-    </ImageView>
+        android:layout_height="280dp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

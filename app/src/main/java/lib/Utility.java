@@ -25,7 +25,10 @@ public class Utility {
     private Utility(){
     }
 
-    public static String API_KEY = "14dd997f3bce981d5cc1118ace4bf690";
+    public static String API_KEY = "APIKEY PUT HERE";
+
+
+
     public static final String Favorite_Movie = "Favorite_Movie";
     public static final String MoviesIDList = "MoviesIDList";
 
