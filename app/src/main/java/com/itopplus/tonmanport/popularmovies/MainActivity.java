@@ -13,18 +13,23 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.facebook.stetho.Stetho;
-import com.facebook.stetho.okhttp.StethoInterceptor;
-import com.squareup.okhttp.OkHttpClient;
+import java.util.HashSet;
+import java.util.Set;
 
 import api.TheMoviesModel;
-import api.TheMoviesReviewModel;
-import api.TheMoviesVideoModel;
+import api.TheMoviesFavoriteListModel;
+import lib.Utility;
 
 public class MainActivity extends AppCompatActivity {
+    public enum DisplayMode{
+        Popular,
+        Vote_Average,
+        Favorite
+    }
 
     public final String TAG = "PopularMoviesTAG";
     private boolean bToggle = true;
+    private DisplayMode mDisplayMode = DisplayMode.Popular;
     private int currentPage = 1;
     TheMoviesModel result;
     @Override
@@ -41,20 +46,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void RefreshData() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        FetchMoviesAsyncTask fetchMovies = new FetchMoviesAsyncTask();
-        TheMoviesModel api = new TheMoviesModel();
-        if (bToggle)
-            api.mode = "popularity";
-        else
-            api.mode = "vote_average";
-
-        api.page = currentPage;
-
-        fetchMovies.execute(api);
         try {
-            result = fetchMovies.get();
+            if(mDisplayMode == DisplayMode.Popular || mDisplayMode == DisplayMode.Vote_Average) {
+                TheMoviesModel api = new TheMoviesModel();
+                api.mode = mDisplayMode == DisplayMode.Popular ?  "popularity" : "vote_average";
+                api.page = currentPage;
+                FetchMoviesAsyncTask fetchMovies = new FetchMoviesAsyncTask();
+                fetchMovies.execute(api);
+                result = fetchMovies.get();
+            }else{
+                FetchFavMoviesAsyncTask fetchFavMovies = new FetchFavMoviesAsyncTask();
+                TheMoviesFavoriteListModel api = new TheMoviesFavoriteListModel();
+
+                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+                Set<String> restoredText = sharedPrefs.getStringSet(Utility.MoviesIDList, new HashSet<String>());
+                Log.d("TAG", String.valueOf(restoredText.size()));
+                if(restoredText.size()>0) {
+                    api.moviesIDList = restoredText;
+                    fetchFavMovies.execute(api);
+                    result = fetchFavMovies.get();
+                }else{
+                    Toast.makeText(this,"No found any favorite movies.",Toast.LENGTH_SHORT);
+                    return;
+                }
+
+            }
+
             GridView gridview = (GridView) findViewById(R.id.gridview);
             gridview.setAdapter(new ImageAdapter(this, R.layout.grid_item, result.results));
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,27 +103,25 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_toggle) {
-            bToggle = !bToggle;
-            if(bToggle)
-                item.setTitle(R.string.highrate_text);
-            else
-                item.setTitle(R.string.popularity_text);
-
+        if (id == R.id.action_popular) {
+            mDisplayMode = DisplayMode.Popular;
             currentPage = 1;
-            RefreshData();
-        }else if(id == R.id.action_nextpage){
+        }else if (id == R.id.action_highrate) {
+            mDisplayMode = DisplayMode.Vote_Average;
+            currentPage = 1;
+        }
+        else if(id == R.id.action_favorite){
+            mDisplayMode = DisplayMode.Favorite;
+            currentPage = 1;
+        }
+        else if(id == R.id.action_nextpage){
             currentPage = currentPage+1;
-            RefreshData();
         }else if(id == R.id.action_prevpage){
             if(currentPage!=1) {
                 currentPage = currentPage - 1;
-                RefreshData();
             }
         }
-
+        RefreshData();
         return super.onOptionsItemSelected(item);
     }
 

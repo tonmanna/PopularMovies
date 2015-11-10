@@ -2,9 +2,11 @@ package com.itopplus.tonmanport.popularmovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,11 +30,11 @@ import api.TheMoviesReviewModel;
 import api.TheMoviesVideoModel;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import lib.Utility;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
-    private static final String Favorite_Movie = "Favorite_Movie";
-    private static final String MoviesIDList = "MoviesIDList";
+
     private int current_page = 1;
     private boolean bCheckFavorite = false;
     @Bind(R.id.detail_text_head) TextView tvHead1;
@@ -78,38 +80,34 @@ public class MovieDetailActivity extends AppCompatActivity {
         apiReview.id = movies_result.id;
         fetchReview.execute(apiReview);
 
-        SharedPreferences prefs = getSharedPreferences(Favorite_Movie, MODE_PRIVATE);
-        final SharedPreferences.Editor editor = getSharedPreferences(Favorite_Movie, MODE_PRIVATE).edit();
-        final Set<String> restoredText = prefs.getStringSet("MoviesIDList", null);
-        if (restoredText != null) {
-            for(String restoreMovieID:restoredText){
-                if(restoreMovieID.equals(Long.toString(movies_result.id))) {
-                    bCheckFavorite = true;
-                    cbFavorite.setChecked(bCheckFavorite);
-                    break;
-                }
+
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        final Set<String> restoredText = sharedPrefs.getStringSet(Utility.MoviesIDList, new HashSet<String>());
+        for(String restoreMovieID:restoredText){
+            if(restoreMovieID.equals(Long.toString(movies_result.id))) {
+                bCheckFavorite = true;
+                cbFavorite.setChecked(bCheckFavorite);
+                break;
             }
-        }else{
-            Set<String> setStr = new HashSet<String>();
-            editor.putStringSet(MoviesIDList, setStr);
-            editor.commit();
         }
+
         cbFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                                   @Override
                                                   public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                                      SharedPreferences.Editor editor = sharedPrefs.edit();
+                                                      Set<String> inText = new HashSet<String>(restoredText);
                                                       if(isChecked) {
-                                                          restoredText.add(Long.toString(movies_result.id));
-                                                          editor.putStringSet(MoviesIDList, restoredText);
+                                                          inText.add(Long.toString(movies_result.id));
+                                                          editor.putStringSet(Utility.MoviesIDList, inText).commit();
                                                       }else {
                                                           for(String restoreMovieID:restoredText){
                                                               if(restoreMovieID.equals(Long.toString(movies_result.id))) {
-                                                                  restoredText.remove(restoreMovieID);
-                                                                  editor.putStringSet(MoviesIDList, restoredText);
+                                                                  inText.remove(restoreMovieID);
+                                                                  editor.putStringSet(Utility.MoviesIDList, inText).commit();
                                                                   break;
                                                               }
                                                           }
                                                       }
-                                                      editor.commit();
                                                   }
                                               }
         );

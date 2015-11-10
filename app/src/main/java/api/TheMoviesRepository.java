@@ -119,50 +119,45 @@ public class TheMoviesRepository
     }
 
 
-    public TheMoviesModel getFavoriteMove(TheMoviewsFavoriteListModel moviesFavoriteAPI) throws JSONException {
+    public TheMoviesModel getFavoriteMove(TheMoviesFavoriteListModel moviesFavoriteAPI) throws JSONException {
         try {
-
-
-
             TheMoviesModel returnResult = new TheMoviesModel();
             returnResult.page = 1;
             returnResult.total_pages = 1;
             returnResult.total_results = moviesFavoriteAPI.moviesIDList.size();
             returnResult.results = new ArrayList<TheMoviesResultList>();
 
-            //TODO : GET result then put to List<Object>
-            String result = Utility.HTTPGet(moviesFavoriteAPI);
-            JSONObject JsonObj = new JSONObject(result);
-            JSONArray resultsMoviesArray = JsonObj.getJSONArray("results");
-            for (int i = 0; i < resultsMoviesArray.length(); i++) {
+            for(String strMovieID : moviesFavoriteAPI.moviesIDList) {
+                //TODO : GET result then put to List<Object>
+                moviesFavoriteAPI.id = Long.valueOf(strMovieID);
+                String result = Utility.HTTPGet(moviesFavoriteAPI);
+                JSONObject JsonObj = new JSONObject(result);
                 TheMoviesResultList movies = new TheMoviesResultList();
-                JSONObject resultMovies = resultsMoviesArray.getJSONObject(i);
-                movies.backdrop_path = "http://image.tmdb.org/t/p/w185" + resultMovies.getString("backdrop_path");
-                movies.id = resultMovies.getLong("id");
-                movies.title = resultMovies.getString("title");
-                movies.original_title = resultMovies.getString("original_title");
-                movies.overview = resultMovies.getString("overview");
-                movies.poster_path = "http://image.tmdb.org/t/p/w185" + resultMovies.getString("poster_path");
-                movies.poster_path_hires = "http://image.tmdb.org/t/p/w780" + resultMovies.getString("poster_path");
 
-                movies.adult = resultMovies.getBoolean("adult");
+                movies.backdrop_path = "http://image.tmdb.org/t/p/w185" + JsonObj.getString("backdrop_path");
+                movies.id = JsonObj.getLong("id");
+                movies.title = JsonObj.getString("title");
+                movies.original_title = JsonObj.getString("original_title");
+                movies.overview = JsonObj.getString("overview");
+                movies.poster_path = "http://image.tmdb.org/t/p/w185" + JsonObj.getString("poster_path");
+                movies.poster_path_hires = "http://image.tmdb.org/t/p/w780" + JsonObj.getString("poster_path");
+                movies.adult = JsonObj.getBoolean("adult");
                 try {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    String dateString = resultMovies.getString("release_date");
+                    String dateString = JsonObj.getString("release_date");
                     movies.release_date = dateFormat.parse(dateString);
                 } catch (Exception ex) {
                     movies.release_date = null;
                 }
-                movies.video = resultMovies.getBoolean("video");
-                movies.vote_average = resultMovies.getDouble("vote_average");
-                movies.vote_count = resultMovies.getInt("vote_count");
 
-                movies.popularity = resultMovies.getDouble("popularity");
-                movies.original_language = resultMovies.getString("original_language");
-
+                movies.video = JsonObj.getBoolean("video");
+                movies.vote_average = JsonObj.getDouble("vote_average");
+                movies.vote_count = JsonObj.getInt("vote_count");
+                movies.popularity = JsonObj.getDouble("popularity");
+                movies.original_language = JsonObj.getString("original_language");
                 returnResult.results.add(movies);
             }
-            if (result != null) {
+            if (returnResult != null) {
                 return returnResult;
             } else {
                 return null;

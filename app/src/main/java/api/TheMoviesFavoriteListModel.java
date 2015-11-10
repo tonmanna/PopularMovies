@@ -11,7 +11,7 @@ import lib.Utility;
 /**
  * Created by Tonman on 9/11/2558.
  */
-public class TheMoviewsFavoriteListModel implements IHTTPRequestParam{
+public class TheMoviesFavoriteListModel implements IHTTPRequestParam{
     public String api = Utility.API_KEY;
     private final String API_KEY = "api_key";
     public final String BASE_URL = "api.themoviedb.org";

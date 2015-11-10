@@ -26,7 +26,8 @@ public class Utility {
     }
 
     public static String API_KEY = "14dd997f3bce981d5cc1118ace4bf690";
-
+    public static final String Favorite_Movie = "Favorite_Movie";
+    public static final String MoviesIDList = "MoviesIDList";
 
     public static String HTTPGetManual(IHTTPRequestParam params){
         // These two need to be declared outside the try/catch

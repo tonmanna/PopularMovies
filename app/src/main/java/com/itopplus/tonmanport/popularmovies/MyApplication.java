@@ -12,11 +12,11 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        deleteCache(this);
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(this)
-                        .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
-                        .build());
+//        deleteCache(this);
+//        Stetho.initialize(
+//                Stetho.newInitializerBuilder(this)
+//                        .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+//                        .build());
     }
 
     public static void deleteCache(Context context) {
